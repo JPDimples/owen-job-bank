@@ -1,0 +1,18 @@
+{
+  "checked_date": "2026-11-16",
+  "effective_date": "2026-10-01",
+  "general_rate": 17.95,
+  "general_rate_display": "$17.95 per hour",
+  "next_change": "Rates are indexed annually to the Ontario Consumer Price Index; any new rate is published on or before April 1 and takes effect October 1. Next change would take effect 2027-10-01.",
+  "notes": "Confirmed against the live ontario.ca page (Your guide to the Employment Standards Act — Minimum wage) on 2026-11-16. The chart figures in the existing job chart ($17.95 general / $16.90 student, effective Oct 1, 2026) are correct and current. Note: a student who works MORE than 28 hours/week while school is in session is paid the general rate, not the student rate.",
+  "previous_rates": {
+    "general_rate_2025_2026": 17.6,
+    "student_rate_2025_2026": 16.6
+  },
+  "rate_period": "2026-10-01 to 2027-09-30",
+  "source_url": "https://www.ontario.ca/document/your-guide-employment-standards-act-0/minimum-wage",
+  "student_rate": 16.9,
+  "student_rate_display": "$16.90 per hour",
+  "student_rate_rule": "Applies to students under 18 who work 28 hours a week or less when school is in session, or who work during a school break or summer holidays.",
+  "verified": true
+}

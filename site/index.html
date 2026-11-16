@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Owen's Job Bank — First jobs in Bowmanville &amp; Durham Region</title>
+<meta name="description" content="First jobs in Bowmanville and Durham Region for a high-school student — no car needed. Verified listings, pay, programs and career paths, checked November 16, 2026.">
+<link rel="stylesheet" href="./styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+<script src="./app.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <p class="eyebrow">Bowmanville &middot; Durham Region, Ontario</p>
+    <h1>Owen&rsquo;s Job Bank</h1>
+    <p class="subtitle">First jobs in Bowmanville &amp; Durham Region &mdash; no car needed.</p>
+    <nav class="quick-nav" aria-label="Sections">
+      <a href="#jobs">Jobs</a>
+      <a href="#charts">Pay &amp; charts</a>
+      <a href="#paths">Career paths</a>
+      <a href="#schooling">Schooling</a>
+      <a href="#programs">Programs</a>
+      <a href="#initiatives">After school</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- Trust bar: rendered from minimum-wage.json + meta.json -->
+  <section class="trust-bar" id="trust-bar" aria-label="Pay benchmark and data freshness">
+    <p class="trust-loading">Loading pay benchmark&hellip;</p>
+  </section>
+
+  <!-- Town selector -->
+  <section class="town-picker" aria-label="Choose a town">
+    <h2>Where are you looking?</h2>
+    <p class="hint">Jobs and after-school options change with the town. Programs, schooling and career paths cover the whole region, so they stay put.</p>
+    <div class="town-buttons" id="town-buttons" role="group" aria-label="Towns"></div>
+  </section>
+
+  <!-- Jobs -->
+  <section id="jobs" aria-label="Jobs">
+    <div class="section-head">
+      <h2>Jobs in <span id="jobs-town-name">Bowmanville</span></h2>
+      <p class="section-sub">Part-time and student-friendly roles. Always open the linked posting before applying &mdash; listings change fast.</p>
+    </div>
+
+    <div class="filters" id="filters">
+      <label class="search-wrap">
+        <span class="sr-only">Search jobs</span>
+        <input type="search" id="search-input" placeholder="Search job title or employer&hellip;" autocomplete="off">
+      </label>
+      <div class="filter-row">
+        <label class="toggle">
+          <input type="checkbox" id="filter-noexp">
+          <span>No experience needed only</span>
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="filter-growth">
+          <span>Career-growth friendly only</span>
+        </label>
+      </div>
+      <div class="filter-row">
+        <label class="select-wrap">Pay
+          <select id="filter-pay">
+            <option value="all">Any pay</option>
+            <option value="under18">Under $18/hr</option>
+            <option value="18to20">$18&ndash;$20/hr</option>
+            <option value="20plus">$20+/hr</option>
+            <option value="notlisted">Wage not listed</option>
+          </select>
+        </label>
+        <label class="select-wrap">Category
+          <select id="filter-category">
+            <option value="all">All categories</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <p class="result-count" id="result-count" aria-live="polite"></p>
+    <div class="job-list" id="job-list"></div>
+    <div class="empty-state" id="jobs-empty" hidden>
+      <p><strong>No jobs match those filters in this town.</strong></p>
+      <p>Try clearing a filter, or switch to a nearby town &mdash; Courtice and Oshawa are a bus ride away.</p>
+      <button type="button" id="clear-filters" class="btn">Clear all filters</button>
+    </div>
+  </section>
+
+  <!-- Charts -->
+  <section id="charts" aria-label="Pay and job charts">
+    <div class="section-head">
+      <h2>What the numbers say</h2>
+      <p class="section-sub">Charts update when you switch town. Only jobs with a listed wage are counted in the pay chart.</p>
+    </div>
+    <div class="chart-grid">
+      <figure class="chart-card">
+        <figcaption>Pay of jobs with a listed wage</figcaption>
+        <div class="chart-wrap"><canvas id="chart-pay" height="220"></canvas></div>
+        <p class="takeaway" id="takeaway-pay"></p>
+      </figure>
+      <figure class="chart-card">
+        <figcaption>Jobs by category</figcaption>
+        <div class="chart-wrap"><canvas id="chart-category" height="220"></canvas></div>
+        <p class="takeaway" id="takeaway-category"></p>
+      </figure>
+      <figure class="chart-card">
+        <figcaption>Government programs by status</figcaption>
+        <div class="chart-wrap"><canvas id="chart-programs" height="220"></canvas></div>
+        <p class="takeaway" id="takeaway-programs"></p>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Career paths (region-wide) -->
+  <section id="paths" aria-label="Career paths">
+    <div class="section-head">
+      <h2>Career paths</h2>
+      <p class="section-sub"><span class="region-tag">Region-wide</span> &mdash; these ladders work across Durham Region, not just one town. Timeframes are general guidance unless a source says otherwise.</p>
+    </div>
+    <div class="path-list" id="path-list"></div>
+  </section>
+
+  <!-- Schooling & training (region-wide) -->
+  <section id="schooling" aria-label="Schooling and training">
+    <div class="section-head">
+      <h2>Schooling &amp; training</h2>
+      <p class="section-sub"><span class="region-tag">Region-wide</span> &mdash; co-op, apprenticeships, college credits and certificates that make a first job easier to land.</p>
+    </div>
+    <div class="card-list" id="schooling-list"></div>
+  </section>
+
+  <!-- Government programs (region-wide) -->
+  <section id="programs" aria-label="Government programs">
+    <div class="section-head">
+      <h2>Government programs</h2>
+      <p class="section-sub"><span class="region-tag">Region-wide</span> &mdash; federal and Ontario programs for youth. Read the eligibility line before getting excited &mdash; some are summer-only, and some need you to be out of school.</p>
+    </div>
+    <div class="card-list" id="program-list"></div>
+  </section>
+
+  <!-- After-school initiatives (town-filtered) -->
+  <section id="initiatives" aria-label="After-school initiatives">
+    <div class="section-head">
+      <h2>After-school initiatives in <span id="initiatives-town-name">Bowmanville</span></h2>
+      <p class="section-sub">Free and low-cost places to go, volunteer hours, and people who can help with the job hunt. Filtered by town.</p>
+    </div>
+    <div class="card-list" id="initiative-list"></div>
+    <div class="empty-state" id="initiatives-empty" hidden>
+      <p><strong>Nothing listed for this town yet.</strong></p>
+      <p>That doesn&rsquo;t mean nothing exists &mdash; it means nothing was verified for this town on November 16, 2026. Bowmanville and Oshawa have the most options.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <h2>Sources</h2>
+    <p>Listings and facts were checked on November 16, 2026 against:</p>
+    <ul class="source-list" id="source-list"></ul>
+    <p class="fineprint">Built November 16, 2026 &mdash; this is a snapshot, not live data. Listings close, wages change and programs move their dates. Always check the linked posting or program page before applying.</p>
+    <p class="fineprint">Data files: <a href="./data/jobs.json">jobs.json</a> &middot; <a href="./data/programs.json">programs.json</a> &middot; <a href="./data/schooling.json">schooling.json</a> &middot; <a href="./data/initiatives.json">initiatives.json</a> &middot; <a href="./data/career-paths.json">career-paths.json</a> &middot; <a href="./data/minimum-wage.json">minimum-wage.json</a></p>
+    <p class="fineprint"><a href="https://github.com/JPDimples/owen-job-bank" target="_blank" rel="noopener">github.com/JPDimples/owen-job-bank</a></p>
+  </div>
+</footer>
+</body>
+</html>
