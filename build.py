@@ -41,6 +41,7 @@ SOURCES = [
     ("schooling.json", ["name", "description", "source_url", "checked_date", "verified"], "list"),
     ("initiatives.json", ["name", "description", "town", "source_url", "checked_date", "verified"], "list"),
     ("career-paths.json", ["name", "summary", "steps", "source_url", "checked_date", "verified"], "list"),
+    ("job-sites.json", ["name", "description", "account", "url_template", "source_url", "checked_date", "verified"], "list"),
     ("minimum-wage.json", ["general_rate", "student_rate", "effective_date", "source_url", "checked_date", "verified"], "object"),
 ]
 
@@ -99,6 +100,11 @@ def main():
         if "tim horton" in hay:
             fail(f"jobs.json[{i}]: Tim Hortons is excluded — {job.get('employer')} / {job.get('title')}")
 
+    # Job-site templates must carry a {town} placeholder the site substitutes.
+    for i, site in enumerate(built["job-sites.json"]):
+        if "{town}" not in (site.get("url_template") or ""):
+            fail(f"job-sites.json[{i}]: url_template must contain a {{town}} placeholder, got {site.get('url_template')!r}")
+
     # Town check: jobs must name one covered town. Initiatives are often
     # regional, so their town field may name several towns — derive the list
     # of covered towns mentioned and require at least one.
@@ -137,6 +143,7 @@ def main():
         "schooling_total": len(built["schooling.json"]),
         "initiatives_total": len(built["initiatives.json"]),
         "career_paths_total": len(built["career-paths.json"]),
+        "job_sites_total": len(built["job-sites.json"]),
     }
     meta = {
         "generated_date": date.today().isoformat(),

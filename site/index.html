@@ -17,6 +17,7 @@
     <p class="subtitle">First jobs in Bowmanville &amp; Durham Region &mdash; no car needed.</p>
     <nav class="quick-nav" aria-label="Sections">
       <a href="#jobs">Jobs</a>
+      <a href="#job-sites">More job sites</a>
       <a href="#charts">Pay &amp; charts</a>
       <a href="#paths">Career paths</a>
       <a href="#schooling">Schooling</a>
@@ -87,6 +88,15 @@
       <p>Try clearing a filter, or switch to a nearby town &mdash; Courtice and Oshawa are a bus ride away.</p>
       <button type="button" id="clear-filters" class="btn">Clear all filters</button>
     </div>
+  </section>
+
+  <!-- Search other job sites (town-filtered) -->
+  <section id="job-sites" aria-label="Search other job sites">
+    <div class="section-head">
+      <h2>Search other job sites in <span id="job-sites-town-name">Bowmanville</span></h2>
+      <p class="section-sub">These links open each site&rsquo;s own search, already set to the town picked above. They open in a new tab &mdash; the listings live on those sites, not here. Only sites whose Bowmanville search was checked on November 16, 2026 are listed.</p>
+    </div>
+    <div class="card-list" id="job-site-list"></div>
   </section>
 
   <!-- Charts -->
@@ -162,7 +172,7 @@
     <p>Listings and facts were checked on November 16, 2026 against:</p>
     <ul class="source-list" id="source-list"></ul>
     <p class="fineprint">Built November 16, 2026 &mdash; this is a snapshot, not live data. Listings close, wages change and programs move their dates. Always check the linked posting or program page before applying.</p>
-    <p class="fineprint">Data files: <a href="./data/jobs.json">jobs.json</a> &middot; <a href="./data/programs.json">programs.json</a> &middot; <a href="./data/schooling.json">schooling.json</a> &middot; <a href="./data/initiatives.json">initiatives.json</a> &middot; <a href="./data/career-paths.json">career-paths.json</a> &middot; <a href="./data/minimum-wage.json">minimum-wage.json</a></p>
+    <p class="fineprint">Data files: <a href="./data/jobs.json">jobs.json</a> &middot; <a href="./data/programs.json">programs.json</a> &middot; <a href="./data/schooling.json">schooling.json</a> &middot; <a href="./data/initiatives.json">initiatives.json</a> &middot; <a href="./data/career-paths.json">career-paths.json</a> &middot; <a href="./data/job-sites.json">job-sites.json</a> &middot; <a href="./data/minimum-wage.json">minimum-wage.json</a></p>
     <p class="fineprint"><a href="https://github.com/JPDimples/owen-job-bank" target="_blank" rel="noopener">github.com/JPDimples/owen-job-bank</a></p>
   </div>
 </footer>

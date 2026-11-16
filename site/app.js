@@ -8,6 +8,7 @@
     schooling: './data/schooling.json',
     initiatives: './data/initiatives.json',
     paths: './data/career-paths.json',
+    sites: './data/job-sites.json',
     wage: './data/minimum-wage.json',
     meta: './data/meta.json'
   };
@@ -21,7 +22,7 @@
     category: 'all'
   };
 
-  var data = { jobs: [], programs: [], schooling: [], initiatives: [], paths: [], wage: null, meta: null };
+  var data = { jobs: [], programs: [], schooling: [], initiatives: [], paths: [], sites: [], wage: null, meta: null };
   var charts = { pay: null, category: null, programs: null };
 
   /* ---------- helpers ---------- */
@@ -122,6 +123,7 @@
     renderTowns();
     renderJobs();
     renderInitiatives();
+    renderJobSites();
     renderCharts();
   }
 
@@ -445,6 +447,24 @@
     }).join('');
   }
 
+  /* ---------- other job sites (town-filtered) ---------- */
+
+  function renderJobSites() {
+    $('job-sites-town-name').textContent = state.town;
+    $('job-site-list').innerHTML = data.sites.map(function (s) {
+      var url = (s.url_template || '').split('{town}').join(encodeURIComponent(state.town));
+      return '<article class="info-card">' +
+        '<h3>' + esc(s.name) + '</h3>' +
+        '<p>' + esc(s.description || '') + '</p>' +
+        '<dl><dt>Account</dt><dd>' + esc(s.account || 'Not stated') + '</dd></dl>' +
+        '<p><a class="job-link" href="' + esc(url) + '" target="_blank" rel="noopener">Search ' + esc(state.town) +
+          ' jobs on ' + esc(s.name) + '</a></p>' +
+        '<p class="meta-line">Link checked ' + esc(s.checked_date || '2026-11-16') +
+          (s.verified === true ? ' &middot; verified' : ' &middot; unverified') + '</p>' +
+      '</article>';
+    }).join('');
+  }
+
   /* ---------- initiatives ---------- */
 
   function isNotForTeens(item) {
@@ -483,7 +503,7 @@
   function renderSources() {
     var seen = {};
     var items = [];
-    [data.jobs, data.programs, data.schooling, data.initiatives, data.paths].forEach(function (arr) {
+    [data.jobs, data.programs, data.schooling, data.initiatives, data.paths, data.sites].forEach(function (arr) {
       arr.forEach(function (rec) {
         (rec.source_url ? [rec.source_url] : []).forEach(function (u) {
           try {
@@ -524,6 +544,7 @@
       populateCategoryFilter();
       renderJobs();
       renderInitiatives();
+      renderJobSites();
       renderPaths();
       renderSchooling();
       renderPrograms();
