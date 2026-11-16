@@ -240,6 +240,13 @@ main section { margin: 34px 0; }
   background: var(--gold-soft); border-radius: 10px;
   padding: 10px 12px; font-size: .93rem; margin-bottom: 10px;
 }
+.pay-note {
+  background: var(--gold-soft); border-radius: 10px;
+  padding: 10px 12px; font-size: .93rem; margin-bottom: 10px;
+}
+.pay-note.below-student {
+  background: var(--danger-soft); color: var(--danger);
+}
 
 /* Career paths */
 .path-list { display: grid; gap: 16px; }

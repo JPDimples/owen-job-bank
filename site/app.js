@@ -164,6 +164,22 @@
     var growthBadge = isGrowthFriendly(j) ? '<span class="badge growth">Career-growth friendly</span>' : '';
     var warning = /NOT conducive|NOT for teens|night shift|not recommended|warning/i.test(j.notes || '')
       ? '<p class="warn-note"><strong>Heads up:</strong> ' + esc(j.notes) + '</p>' : '';
+    // Pay check: starting rate vs the Ontario minimum-wage rates in data.wage.
+    // A floor below the general rate is legal for a student under 18 working
+    // 28 hrs/week or less while school is in session, as long as it is at or
+    // above the student rate — say so plainly instead of leaving it unexplained.
+    var payNote = '';
+    var mw = data.wage;
+    if (j.wage_cad_hourly != null && mw && mw.general_rate != null && mw.student_rate != null) {
+      if (j.wage_cad_hourly < mw.student_rate) {
+        payNote = '<p class="pay-note below-student"><strong>Pay check:</strong> this starting rate is below even the ' +
+          esc(fmtMoney(mw.student_rate)) + '/hr student rate &mdash; double-check the posting before applying.</p>';
+      } else if (j.wage_cad_hourly < mw.general_rate) {
+        payNote = '<p class="pay-note below-general"><strong>Pay check:</strong> this starting rate is below the ' +
+          esc(fmtMoney(mw.general_rate)) + '/hr general minimum, but at or above the ' +
+          esc(fmtMoney(mw.student_rate)) + '/hr student rate &mdash; legal for students under 18 working 28 hrs/week or less while school is in session (or during a break).</p>';
+      }
+    }
 
     return '<article class="job-card ' + (verified ? 'verified' : 'unverified') + '">' +
       '<h3>' + esc(j.title) + '</h3>' +
@@ -180,6 +196,7 @@
         '<div><dt>Experience:</dt><dd>' + esc(exp) + '</dd></div>' +
       '</dl>' +
       '<p class="job-meta"><strong>Wage as listed:</strong> ' + esc(j.wage_text || 'Not stated') + '</p>' +
+      payNote +
       '<p class="hours">' + esc(j.hours_note || '') + '</p>' +
       (j.location_detail ? '<p class="hours">' + esc(j.location_detail) + '</p>' : '') +
       (warning || (j.notes ? '<p class="notes">' + esc(j.notes) + '</p>' : '')) +
