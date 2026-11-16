@@ -1,1 +1,20 @@
-[{"account":"No account needed to search and view jobs; a free account is needed to apply or upload a résumé.","checked_date":"2026-11-16","description":"The biggest job board in Canada — most Bowmanville employers post here, and you can filter by part-time and no-experience roles.","name":"Indeed Canada","source_url":"https://ca.indeed.com/jobs?l=Bowmanville%2C+ON","url_template":"https://ca.indeed.com/jobs?l={town}%2C+ON","verified":true},{"account":"You can browse the search results without signing in; a free account is needed to apply or save a job.","checked_date":"2026-11-16","description":"Jobs posted by employers directly, including big chains and local businesses — good for seeing who is hiring and what they ask for.","name":"LinkedIn Jobs","source_url":"https://www.linkedin.com/jobs/search/?keywords=&location=Bowmanville%2C%20Ontario%2C%20Canada","url_template":"https://www.linkedin.com/jobs/search/?keywords=&location={town}%2C%20Ontario%2C%20Canada","verified":true}]
+[
+  {
+    "account": "No account needed to search and view jobs; a free account is needed to apply or upload a résumé.",
+    "checked_date": "2026-11-16",
+    "description": "The biggest job board in Canada — most {town} employers post here, and you can filter by part-time and no-experience roles.",
+    "name": "Indeed Canada",
+    "source_url": "https://ca.indeed.com/jobs?l=Bowmanville%2C+ON",
+    "url_template": "https://ca.indeed.com/jobs?l={town}%2C+ON",
+    "verified": true
+  },
+  {
+    "account": "You can browse the search results without signing in; a free account is needed to apply or save a job.",
+    "checked_date": "2026-11-16",
+    "description": "Jobs posted by employers directly, including big chains and local businesses — good for seeing who is hiring and what they ask for.",
+    "name": "LinkedIn Jobs",
+    "source_url": "https://www.linkedin.com/jobs/search/?keywords=&location=Bowmanville%2C%20Ontario%2C%20Canada",
+    "url_template": "https://www.linkedin.com/jobs/search/?keywords=&location={town}%2C%20Ontario%2C%20Canada",
+    "verified": true
+  }
+]

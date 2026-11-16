@@ -2,7 +2,7 @@
   {
     "account": "No account needed to search and view jobs; a free account is needed to apply or upload a résumé.",
     "checked_date": "2026-11-16",
-    "description": "The biggest job board in Canada — most Bowmanville employers post here, and you can filter by part-time and no-experience roles.",
+    "description": "The biggest job board in Canada — most {town} employers post here, and you can filter by part-time and no-experience roles.",
     "name": "Indeed Canada",
     "source_url": "https://ca.indeed.com/jobs?l=Bowmanville%2C+ON",
     "url_template": "https://ca.indeed.com/jobs?l={town}%2C+ON",

@@ -453,9 +453,10 @@
     $('job-sites-town-name').textContent = state.town;
     $('job-site-list').innerHTML = data.sites.map(function (s) {
       var url = (s.url_template || '').split('{town}').join(encodeURIComponent(state.town));
+      var desc = (s.description || '').split('{town}').join(state.town);
       return '<article class="info-card">' +
         '<h3>' + esc(s.name) + '</h3>' +
-        '<p>' + esc(s.description || '') + '</p>' +
+        '<p>' + esc(desc) + '</p>' +
         '<dl><dt>Account</dt><dd>' + esc(s.account || 'Not stated') + '</dd></dl>' +
         '<p><a class="job-link" href="' + esc(url) + '" target="_blank" rel="noopener">Search ' + esc(state.town) +
           ' jobs on ' + esc(s.name) + '</a></p>' +
