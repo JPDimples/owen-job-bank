@@ -107,7 +107,9 @@
   /* ---------- sync listings ---------- */
 
   var SYNC_POLL_INTERVAL_MS = 5000;
-  var SYNC_POLL_TIMEOUT_MS = 5 * 60 * 1000;
+  // 10 minutes: the full cycle (cron pickup up to 5 min + check + deploy)
+  // can run past 5 minutes, and a short window reports a false failure.
+  var SYNC_POLL_TIMEOUT_MS = 10 * 60 * 1000;
   var SYNC_TERMINAL = ['ok', 'partial', 'failed'];
 
   // Fetches ./data/sync-status.json (cache-busted). Resolves to the record, or
@@ -144,7 +146,7 @@
     var flagged = (rec.flagged || []).length;
     var unverifiable = (rec.unverifiable || []).length;
     var text = 'Checked ' + checked + ' listings: ' + live + ' live, ' + flagged + ' flagged';
-    if (unverifiable > 0) text += ', and ' + unverifiable + ' could not be checked';
+    if (unverifiable > 0) text += ', and ' + unverifiable + ' could not be checked automatically (those sites block automated checks, so they were left as they were)';
     return text + '.';
   }
 
@@ -190,7 +192,11 @@
         if (!res) return;
         if (!res.ok || !res.run_id) throw new Error('Unexpected sync response');
         pollSyncStatus(res.run_id, Date.now() + SYNC_POLL_TIMEOUT_MS, function (rec) {
-          if (!rec || rec.status === 'failed') {
+          if (!rec) {
+            finishSync('Still syncing \u2014 taking longer than usual. The result will show here when it lands; check back in a few minutes.');
+            return;
+          }
+          if (rec.status === 'failed') {
             finishSync('Sync didn\u2019t finish \u2014 try again in a few minutes.');
             return;
           }

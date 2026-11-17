@@ -249,7 +249,7 @@ def main():
 
     # 7. Build succeeded: commit + push only if something is staged, then deploy.
     commit = "none"
-    run(["git", "add", "research", "data", "site/data/sync-status.json"])
+    run(["git", "add", "research", "data", "site/data/sync-status.json", "sync-log.md"])
     if git_staged_changes():
         short = run_id.split("-")[0]
         msg = (f"Sync {short}: checked {checked} listings, {live} live, "
