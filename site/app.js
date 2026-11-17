@@ -8,6 +8,7 @@
     schooling: './data/schooling.json',
     initiatives: './data/initiatives.json',
     paths: './data/career-paths.json',
+    internships: './data/internships.json',
     sites: './data/job-sites.json',
     wage: './data/minimum-wage.json',
     meta: './data/meta.json'
@@ -22,7 +23,7 @@
     category: 'all'
   };
 
-  var data = { jobs: [], programs: [], schooling: [], initiatives: [], paths: [], sites: [], wage: null, meta: null };
+  var data = { jobs: [], programs: [], schooling: [], initiatives: [], paths: [], internships: [], sites: [], wage: null, meta: null };
   var charts = { pay: null, category: null, programs: null };
 
   /* ---------- helpers ---------- */
@@ -87,7 +88,7 @@
   function renderTrustBar() {
     var w = data.wage, m = data.meta;
     if (!w) return;
-    var checked = (m && m.generated_date) ? m.generated_date : (w.checked_date || '2026-11-16');
+    var checked = (m && m.generated_date) ? m.generated_date : (w.checked_date || '2026-11-17');
     $('trust-bar').innerHTML =
       '<div class="trust-item"><span class="trust-label">Ontario minimum wage (general)</span>' +
       '<span class="trust-value">' + esc(w.general_rate_display) + '</span></div>' +
@@ -322,7 +323,7 @@
       (j.location_detail ? '<p class="hours">' + esc(j.location_detail) + '</p>' : '') +
       (warning || (j.notes ? '<p class="notes">' + esc(j.notes) + '</p>' : '')) +
       '<a class="job-link" href="' + esc(j.source_url) + '" target="_blank" rel="noopener">View posting</a>' +
-      ' <span class="meta-line">&middot; checked ' + esc(j.checked_date || '2026-11-16') + '</span>' +
+      ' <span class="meta-line">&middot; checked ' + esc(j.checked_date || '2026-11-17') + '</span>' +
     '</article>';
   }
 
@@ -337,7 +338,7 @@
       $('job-list').innerHTML = '';
       empty.hidden = false;
       empty.innerHTML = '<p><strong>No jobs found in ' + esc(state.town) + ' yet.</strong></p>' +
-        '<p>Nothing verified was found for this town on November 16, 2026 &mdash; not a mistake, and not a reason to invent one. ' +
+        '<p>Nothing verified was found for this town on November 17, 2026 &mdash; not a mistake, and not a reason to invent one. ' +
         'Try Bowmanville, Courtice or Oshawa, which are a bus ride away.</p>';
       $('result-count').textContent = 'Showing 0 of 0 jobs in ' + state.town;
     } else if (shown.length === 0) {
@@ -426,7 +427,7 @@
         datasets: [{
           label: label,
           data: counts,
-          backgroundColor: ['#e07840', '#2f7d6d', '#f2b705', '#c24e63', '#7a9e7e', '#8a6d3b'],
+          backgroundColor: ['#1e3a5f', '#3d5a80', '#6b7f99', '#98a8bc', '#c0c9d4', '#f2b705'],
           borderRadius: 6
         }]
       },
@@ -445,8 +446,8 @@
         labels: labels,
         datasets: [{
           data: counts,
-          backgroundColor: ['#2f7d4f', '#2f7d6d', '#a33b2e', '#f2b705'],
-          borderWidth: 2, borderColor: '#fffdf8'
+          backgroundColor: ['#2f7d4f', '#1e3a5f', '#a33b2e', '#f2b705'],
+          borderWidth: 2, borderColor: '#e8eaed'
         }]
       },
       options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
@@ -515,7 +516,7 @@
         '<ol class="steps">' + steps + '</ol>' +
         verifiedNote +
         (p.notes ? '<p class="path-notes">' + esc(p.notes) + '</p>' : '') +
-        '<p class="path-source">' + link(p.source_url, 'Path source') + ' &middot; checked ' + esc(p.checked_date || '2026-11-16') + '</p>' +
+        '<p class="path-source">' + link(p.source_url, 'Path source') + ' &middot; checked ' + esc(p.checked_date || '2026-11-17') + '</p>' +
       '</article>';
     }).join('');
   }
@@ -534,7 +535,7 @@
           '<dt>How to access</dt><dd>' + esc(s.how_to_access || 'Not stated') + '</dd>' +
         '</dl>' +
         (s.notes ? '<p class="notes">' + esc(s.notes) + '</p>' : '') +
-        '<p>' + link(s.source_url, 'Source') + ' &middot; checked ' + esc(s.checked_date || '2026-11-16') + '</p>' +
+        '<p>' + link(s.source_url, 'Source') + ' &middot; checked ' + esc(s.checked_date || '2026-11-17') + '</p>' +
       '</article>';
     }).join('');
   }
@@ -561,7 +562,7 @@
           (keys ? '<dt>Key dates</dt>' + keys : '') +
         '</dl>' +
         warn +
-        '<p>' + link(p.source_url, 'Source') + ' &middot; checked ' + esc(p.checked_date || '2026-11-16') + '</p>' +
+        '<p>' + link(p.source_url, 'Source') + ' &middot; checked ' + esc(p.checked_date || '2026-11-17') + '</p>' +
       '</article>';
     }).join('');
   }
@@ -579,7 +580,7 @@
         '<dl><dt>Account</dt><dd>' + esc(s.account || 'Not stated') + '</dd></dl>' +
         '<p><a class="job-link" href="' + esc(url) + '" target="_blank" rel="noopener">Search ' + esc(state.town) +
           ' jobs on ' + esc(s.name) + '</a></p>' +
-        '<p class="meta-line">Link checked ' + esc(s.checked_date || '2026-11-16') +
+        '<p class="meta-line">Link checked ' + esc(s.checked_date || '2026-11-17') +
           (s.verified === true ? ' &middot; verified' : ' &middot; unverified') + '</p>' +
       '</article>';
     }).join('');
@@ -612,10 +613,39 @@
           '<p class="meta-line"><strong>Ages:</strong> ' + esc(i.ages || 'Not stated') + ' &middot; <strong>Cost:</strong> ' + esc(i.cost || 'Not stated') + '</p>' +
           '<p>' + esc(i.description || '') + '</p>' +
           (i.notes ? '<p class="notes">' + esc(i.notes) + '</p>' : '') +
-          '<p>' + link(i.source_url, 'Source') + ' &middot; checked ' + esc(i.checked_date || '2026-11-16') + '</p>' +
+          '<p>' + link(i.source_url, 'Source') + ' &middot; checked ' + esc(i.checked_date || '2026-11-17') + '</p>' +
         '</article>';
       }).join('');
     }
+  }
+
+  /* ---------- internships & student placements (region-wide) ---------- */
+
+  function renderInternships() {
+    $('internship-list').innerHTML = data.internships.map(function (item) {
+      var verified = item.verified === true;
+      var urgent = item.urgent === true;
+      var statusBadge = (item.status || '').toLowerCase() === 'open'
+        ? '<span class="status-badge status-open">Open now</span>'
+        : '<span class="status-badge status-active">Plan ahead</span>';
+      return '<article class="info-card' + (verified ? '' : ' unknown-status') + '">' +
+        statusBadge +
+        (verified ? '' : '<span class="status-badge status-unknown">Unverified</span>') +
+        (urgent
+          ? '<p class="urgent-banner">Deadline soon &mdash; applications close ' + esc(item.deadline || 'soon') + '.</p>'
+          : '') +
+        '<h3>' + esc(item.title) + '</h3>' +
+        '<p class="meta-line"><strong>Who:</strong> ' + esc(item.provider || '') + ' &middot; ' + esc(item.town || '') + '</p>' +
+        '<p class="meta-line"><strong>Pay:</strong> ' + esc(item.pay || 'Not stated') +
+          ' &middot; <strong>Ages:</strong> ' + esc(item.age_range || 'Not stated') + '</p>' +
+        '<p>' + esc(item.description || '') + '</p>' +
+        (item.deadline && !urgent
+          ? '<p class="meta-line"><strong>Deadline:</strong> ' + esc(item.deadline) + '</p>'
+          : '') +
+        (item.notes ? '<p class="notes">' + esc(item.notes) + '</p>' : '') +
+        '<p>' + link(item.source_url, 'Source') + ' &middot; checked ' + esc(item.checked_date || '2026-11-17') + '</p>' +
+      '</article>';
+    }).join('');
   }
 
   /* ---------- footer sources ---------- */
@@ -623,7 +653,7 @@
   function renderSources() {
     var seen = {};
     var items = [];
-    [data.jobs, data.programs, data.schooling, data.initiatives, data.paths, data.sites].forEach(function (arr) {
+    [data.jobs, data.programs, data.schooling, data.initiatives, data.paths, data.internships, data.sites].forEach(function (arr) {
       arr.forEach(function (rec) {
         (rec.source_url ? [rec.source_url] : []).forEach(function (u) {
           try {
@@ -639,6 +669,17 @@
       '<li>jobbank.gc.ca (Job Bank)</li>';
   }
 
+  /* ---------- back to top ---------- */
+
+  function wireBackToTop() {
+    var btn = $('back-to-top');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    });
+  }
+
   /* ---------- load ---------- */
 
   function loadAll() {
@@ -652,6 +693,7 @@
   }
 
   function init() {
+    wireBackToTop();
     $('search-input').addEventListener('input', function (e) { state.search = e.target.value; renderJobs(); });
     $('filter-noexp').addEventListener('change', function (e) { state.noExpOnly = e.target.checked; renderJobs(); });
     $('filter-growth').addEventListener('change', function (e) { state.growthOnly = e.target.checked; renderJobs(); });
@@ -669,6 +711,7 @@
       renderPaths();
       renderSchooling();
       renderPrograms();
+      renderInternships();
       renderCharts();
       renderSources();
     }).catch(function (err) {

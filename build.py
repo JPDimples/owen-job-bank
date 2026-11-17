@@ -41,6 +41,7 @@ SOURCES = [
     ("schooling.json", ["name", "description", "source_url", "checked_date", "verified"], "list"),
     ("initiatives.json", ["name", "description", "town", "source_url", "checked_date", "verified"], "list"),
     ("career-paths.json", ["name", "summary", "steps", "source_url", "checked_date", "verified"], "list"),
+    ("internships.json", ["title", "provider", "town", "source_url", "checked_date", "verified"], "list"),
     ("job-sites.json", ["name", "description", "account", "url_template", "source_url", "checked_date", "verified"], "list"),
     ("minimum-wage.json", ["general_rate", "student_rate", "effective_date", "source_url", "checked_date", "verified"], "object"),
 ]
@@ -143,6 +144,8 @@ def main():
         "schooling_total": len(built["schooling.json"]),
         "initiatives_total": len(built["initiatives.json"]),
         "career_paths_total": len(built["career-paths.json"]),
+        "internships_total": len(built["internships.json"]),
+        "internships_verified": sum(1 for x in built["internships.json"] if x["verified"]),
         "job_sites_total": len(built["job-sites.json"]),
     }
     meta = {

@@ -19,10 +19,10 @@
     "verified": true
   },
   "counts": {
-    "jobs_total": 28,
-    "jobs_verified": 9,
+    "jobs_total": 31,
+    "jobs_verified": 12,
     "jobs_by_town": {
-      "Bowmanville": 14,
+      "Bowmanville": 17,
       "Courtice": 2,
       "Newcastle": 1,
       "Orono": 0,
@@ -36,6 +36,8 @@
     "schooling_total": 8,
     "initiatives_total": 15,
     "career_paths_total": 6,
+    "internships_total": 6,
+    "internships_verified": 3,
     "job_sites_total": 2
   },
   "towns": [

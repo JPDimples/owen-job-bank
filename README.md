@@ -20,7 +20,7 @@ Whitby, Ajax and Pickering are also covered.
 
 - `research/` — raw research notes and the JSON files the researchers produced
   (`jobs.json`, `programs.json`, `schooling.json`, `initiatives.json`,
-  `career-paths.json`, `minimum-wage.json`, plus `*-notes.md` and `alyn-check.md`).
+  `career-paths.json`, `internships.json`, `minimum-wage.json`, plus `*-notes.md` and `alyn-check.md`).
 - `build.py` — the Python builder. Reads `research/*.json`, validates every
   record (required fields, source URL, checked date, verification flag) and
   emits the site's data files. Re-run it to refresh the site after research
@@ -69,7 +69,7 @@ GitHub Actions deploy or connect the Pages project to GitHub):
    left exactly as-is as "unverifiable this run"), then `build.py`,
    commits + pushes only if `research/` or `data/` changed, redeploys, and
    writes `site/data/sync-status.json` (which the button polls to show the
-   result, e.g. "Checked 69 listings: 45 live, 0 flagged").
+   result, e.g. "Checked 75 listings: 45 live, 0 flagged").
 3. The runner never deletes a record, never invents a wage or a checked date,
    and a failed `build.py` means no commit — the failure is still deployed
    as a status file so the button shows it.

@@ -80,6 +80,7 @@ SOURCES = [
     ("schooling.json", "list"),
     ("initiatives.json", "list"),
     ("career-paths.json", "list"),
+    ("internships.json", "list"),
     ("job-sites.json", "list"),
     ("minimum-wage.json", "object"),
 ]
