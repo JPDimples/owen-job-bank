@@ -3,15 +3,15 @@
 ## Totals
 
 - **Total postings in `jobs.json`: 31**
-- **Verified from the source page itself (opened and read in full): 12**
-- **Unverified (search-snippet / aggregator-mirror only, posting page not opened): 19**
+- **Verified from the source page itself (opened and read in full): 11**
+- **Unverified (search-snippet / aggregator-mirror only, posting page not opened, or live posting link dead): 20**
 - Verification rule used: `verified: true` only when the posting page itself was opened with `browser.open` and read on 2026-11-16 or 2026-11-17. Anything sourced from a search-result snippet is `verified: false`, with that stated in its `notes` field.
 
 ## Per-town counts
 
 | Town | Postings | Verified |
 |---|---|---|
-| Bowmanville | 17 | 9 |
+| Bowmanville | 17 | 8 |
 | Oshawa | 5 | 2 |
 | Whitby | 3 | 1 |
 | Courtice | 2 | 0 |
@@ -23,7 +23,7 @@
 ## Best bets (verified, no experience, after-school friendly)
 
 1. **Walmart Electronics Associate, Bowmanville** — $18.10/hr, no minimum qualifications listed, evenings/nights available.
-2. **No Frills Grocery Clerk (PT Day) / Dairy-Frozen Clerk / Meat-Deli-Bakery Clerk / Cashier, Bowmanville** — $17.95–$18.45/hr (Cashier scale $17.95–$27.44), explicitly no experience required, training provided. All four at Tim's No Frills, 95 Baseline Rd W. Note: the No Frills Cashier posting says the role handles liquor products — in Ontario that usually means 18+, check with the store.
+2. **No Frills Grocery Clerk (PT Day) / Dairy-Frozen Clerk / Meat-Deli-Bakery Clerk / Cashier, Bowmanville** — $17.95–$18.45/hr (Cashier scale $17.95–$27.44), explicitly no experience required, training provided. All four at Tim's No Frills, 95 Baseline Rd W. Note: the No Frills Cashier posting says the role handles liquor products — in Ontario that usually means 18+, check with the store. **Grocery Clerk Day posting link died Nov 17 — ask in-store; see "Nov 17 — No Frills Grocery Clerk link died" below.**
 3. **Home Depot Sales Associate (PT), Bowmanville** — $18.25–$19.25/hr, but lists a high-school diploma as minimum education — flag before applying.
 4. **Subway Sandwich Artist, Bowmanville** — no experience, some high school; wage "to be discussed" (no figure in posting).
 5. **Real Canadian Superstore Cashier (PT Day), Oshawa** — $17.95–$27.44/hr, no experience.
@@ -51,7 +51,13 @@ Also verified Nov 17 but NOT after-school friendly: **Walmart Stocking 1 Team As
 
 The old Loblaw careers links mix in postings from other provinces with different pay. Checked Nov 17:
 
-- The Simplify Jobs **Grocery Clerk** listing with this title is a **BC posting** ($18.25–$18.45, tagged #BC) — it was NOT used. The Bowmanville Grocery Clerk card keeps the mywhitbyontario.ca mirror of the Tim's No Frills Bowmanville posting (posted Nov 12, 2026, $17.95–$18.45).
+- The Simplify Jobs **Grocery Clerk** listing with this title is a **BC posting** ($18.25–$18.45, tagged #BC) — it was NOT used. The Bowmanville Grocery Clerk card kept the mywhitbyontario.ca mirror of the Tim's No Frills Bowmanville posting (posted Nov 12, 2026, $17.95–$18.45) — until that mirror died later the same day; see the next section.
+
+## Nov 17 — No Frills Grocery Clerk Day posting link died
+
+- The mywhitbyontario.ca mirror (grocery-clerk-part-time-day-greenlight-requisition-4179320) returned **HTTP 500 / "Something went wrong"** on two direct fetches Nov 17, and the sync checker logged the same 500 — not transient, the mirror is broken. The live browser check had already seen the same error page.
+- Searched again Nov 17 for a live Bowmanville Day-shift posting: **none exists.** Indeed's Loblaw company page lists Bowmanville Grocery Clerk only as Part Time Night ($17.60–$19.85); the Day listings found are Barrie, Etobicoke (245 Dixon Rd), BC ($18.25–$18.45, careers.loblaw.ca R2000729647) and Alberta. The two Simplify Jobs Bowmanville "Grocery Clerk" pages ($17.60–$19.85, published Oct 23) match the night-shift wage range and state no shift on the page — NOT used for the Day card. The Indeed "Clerk-Grocery, Bowmanville L1C 5A3" posting is referral-only (apply via a current Loblaw colleague) — NOT used.
+- **Fix:** the card now points to the live Indeed **No Frills Bowmanville job search** (https://ca.indeed.com/jobs?q=No+Frills&l=Bowmanville%2C+ON — page opened and confirmed Nov 17, title "No Frills Jobs in Bowmanville, ON"), with button label "Search No Frills jobs in Bowmanville" (new optional `link_label` field; app.js falls back to "View posting"). Notes say plainly the posting link died, the role may have closed, and to ask in-store at 95 Baseline Rd W. Card flipped to `verified: false`. Pay shown ($17.95–$18.45) is what the posting listed when last readable Nov 17 — not re-verifiable now, and the notes say so.
 - **Meat/Deli/Bakery Clerk** and **Cashier** now link to the Loblaw listings on **Simplify Jobs** (both read in full Nov 17, Ontario, $17.95–$18.45 / Cashier $17.95–$27.44), not to Loblaw's careers site.
 - **Dairy/Frozen Clerk** keeps its Indeed link (still live Nov 17, $17.95–$18.45).
 - All four No Frills Bowmanville cards now carry the store address: **Tim's No Frills, 95 Baseline Rd W** (opened Oct 1, 2026, per Loblaw).

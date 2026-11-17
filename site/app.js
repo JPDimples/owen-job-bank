@@ -87,7 +87,20 @@
 
   function renderTrustBar() {
     var w = data.wage, m = data.meta;
-    if (!w) return;
+    // Wage data missing or incomplete: say so plainly instead of leaving the
+    // static "Loading pay benchmark…" text in place. This only fires when the
+    // data genuinely did not load — never hide it while data is missing.
+    if (!w || w.general_rate_display == null || w.student_rate_display == null) {
+      $('trust-bar').innerHTML =
+        '<p class="trust-unavailable"><strong>Pay benchmark unavailable.</strong> ' +
+        'The Ontario minimum-wage data didn&rsquo;t load &mdash; reload the page and try again. ' +
+        'The job listings below are still the last checked data; always check the linked posting before applying.</p>' +
+        '<div class="sync-row"><button type="button" id="sync-btn" class="btn">Sync listings</button>' +
+        '<span id="sync-last" class="sync-last">Last synced &mdash; never</span></div>' +
+        '<p id="sync-status" class="sync-status" aria-live="polite"></p>';
+      wireSyncButton();
+      return;
+    }
     var checked = (m && m.generated_date) ? m.generated_date : (w.checked_date || '2026-11-17');
     $('trust-bar').innerHTML =
       '<div class="trust-item"><span class="trust-label">Ontario minimum wage (general)</span>' +
@@ -322,7 +335,7 @@
       '<p class="hours">' + esc(j.hours_note || '') + '</p>' +
       (j.location_detail ? '<p class="hours">' + esc(j.location_detail) + '</p>' : '') +
       (warning || (j.notes ? '<p class="notes">' + esc(j.notes) + '</p>' : '')) +
-      '<a class="job-link" href="' + esc(j.source_url) + '" target="_blank" rel="noopener">View posting</a>' +
+      '<a class="job-link" href="' + esc(j.source_url) + '" target="_blank" rel="noopener">' + esc(j.link_label || 'View posting') + '</a>' +
       ' <span class="meta-line">&middot; checked ' + esc(j.checked_date || '2026-11-17') + '</span>' +
     '</article>';
   }
@@ -682,14 +695,24 @@
 
   /* ---------- load ---------- */
 
-  function loadAll() {
-    var keys = Object.keys(DATA_FILES);
+  // Loads a subset of the data files. The trust-bar files (wage + meta) load
+  // on their own first, so the pay benchmark renders even if one of the
+  // other files fails — previously a single failed fetch left the trust bar
+  // stuck on "Loading pay benchmark…" with nothing rendered at all.
+  function loadFiles(keys) {
     return Promise.all(keys.map(function (k) {
       return fetch(DATA_FILES[k]).then(function (r) {
         if (!r.ok) throw new Error('Failed to load ' + DATA_FILES[k] + ' (' + r.status + ')');
         return r.json();
       }).then(function (json) { data[k] = json; });
     }));
+  }
+
+  function loadTrustData() { return loadFiles(['wage', 'meta']); }
+
+  function loadRest() {
+    var keys = Object.keys(DATA_FILES).filter(function (k) { return k !== 'wage' && k !== 'meta'; });
+    return loadFiles(keys);
   }
 
   function init() {
@@ -700,9 +723,17 @@
     $('filter-pay').addEventListener('change', function (e) { state.pay = e.target.value; renderJobs(); });
     $('filter-category').addEventListener('change', function (e) { state.category = e.target.value; renderJobs(); });
 
-    loadAll().then(function () {
+    // Trust bar first and on its own: the benchmark must never sit on
+    // "Loading…" because an unrelated data file failed.
+    loadTrustData().then(function () {
       renderTrustBar();
       loadInitialSyncStatus();
+    }, function () {
+      renderTrustBar(); // wage/meta missing -> honest "unavailable" message
+      loadInitialSyncStatus();
+    });
+
+    loadRest().then(function () {
       renderTowns();
       populateCategoryFilter();
       renderJobs();

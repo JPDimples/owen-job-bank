@@ -86,6 +86,7 @@ p { margin: 0 0 .7em; }
 }
 .trust-bar .trust-value { font-size: 1.12rem; font-weight: 700; }
 .trust-bar .trust-note { flex-basis: 100%; font-size: .92rem; color: var(--muted); margin: 0; }
+.trust-bar .trust-unavailable { flex-basis: 100%; font-size: .92rem; margin: 0; background: var(--gold-soft); border-radius: 10px; padding: 10px 12px; }
 
 /* Sync row (inside the trust bar) */
 .trust-bar .sync-row {
