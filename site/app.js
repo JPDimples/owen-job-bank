@@ -97,7 +97,120 @@
       '<span class="trust-value">Oct 1, 2026</span> &middot; ' + link(w.source_url, 'ontario.ca') + '</div>' +
       '<p class="trust-note">Data last checked <strong>' + esc(checked) +
       '</strong>. Listings change &mdash; always check the linked posting before applying. ' +
-      'Any job paying below the minimum wage for your age and hours is a red flag.</p>';
+      'Any job paying below the minimum wage for your age and hours is a red flag.</p>' +
+      '<div class="sync-row"><button type="button" id="sync-btn" class="btn">Sync listings</button>' +
+      '<span id="sync-last" class="sync-last">Last synced &mdash; never (data checked ' + esc(checked) + ')</span></div>' +
+      '<p id="sync-status" class="sync-status" aria-live="polite"></p>';
+    wireSyncButton();
+  }
+
+  /* ---------- sync listings ---------- */
+
+  var SYNC_POLL_INTERVAL_MS = 5000;
+  var SYNC_POLL_TIMEOUT_MS = 5 * 60 * 1000;
+  var SYNC_TERMINAL = ['ok', 'partial', 'failed'];
+
+  // Fetches ./data/sync-status.json (cache-busted). Resolves to the record, or
+  // null when it 404s / fails / is not valid JSON — a missing file just means
+  // no sync has ever run, never a user-facing error.
+  function fetchSyncStatus() {
+    return fetch('./data/sync-status.json?ts=' + Date.now()).then(function (r) {
+      if (!r.ok) return null;
+      return r.json();
+    }).catch(function () { return null; });
+  }
+
+  function setSyncLast(text) {
+    var el = $('sync-last');
+    if (el) el.textContent = text;
+  }
+
+  function setSyncStatus(text) {
+    var el = $('sync-status');
+    if (el) el.textContent = text;
+  }
+
+  // On page load: show the last sync time if a sync has ever run; otherwise
+  // leave the "never (data checked …)" fallback set by renderTrustBar().
+  function loadInitialSyncStatus() {
+    fetchSyncStatus().then(function (rec) {
+      if (rec && rec.last_synced) setSyncLast('Last synced ' + rec.last_synced);
+    });
+  }
+
+  function syncResultText(rec) {
+    var checked = (rec.checked == null ? 0 : rec.checked);
+    var live = (rec.live == null ? 0 : rec.live);
+    var flagged = (rec.flagged || []).length;
+    var unverifiable = (rec.unverifiable || []).length;
+    var text = 'Checked ' + checked + ' listings: ' + live + ' live, ' + flagged + ' flagged';
+    if (unverifiable > 0) text += ', and ' + unverifiable + ' could not be checked';
+    return text + '.';
+  }
+
+  function finishSync(message) {
+    var btn = $('sync-btn');
+    if (btn) { btn.disabled = false; btn.textContent = 'Sync listings'; }
+    setSyncStatus(message);
+  }
+
+  // Polls ./data/sync-status.json until a record for this run_id reaches a
+  // terminal status, or the deadline passes. onDone receives the record, or
+  // null on timeout.
+  function pollSyncStatus(runId, deadline, onDone) {
+    fetchSyncStatus().then(function (rec) {
+      if (rec && rec.run_id === runId && SYNC_TERMINAL.indexOf(rec.status) !== -1) {
+        onDone(rec);
+        return;
+      }
+      if (Date.now() >= deadline) {
+        onDone(null);
+        return;
+      }
+      setTimeout(function () { pollSyncStatus(runId, deadline, onDone); }, SYNC_POLL_INTERVAL_MS);
+    });
+  }
+
+  function runSync() {
+    var btn = $('sync-btn');
+    if (!btn || btn.disabled) return;
+    btn.disabled = true;
+    btn.textContent = 'Syncing\u2026';
+    setSyncStatus('Syncing\u2026 checking listings, this can take a couple of minutes.');
+    fetch('/api/sync', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })
+      .then(function (r) {
+        if (r.status === 409) {
+          finishSync('A sync is already running \u2014 try again in a few minutes.');
+          return null;
+        }
+        if (!r.ok) throw new Error('Sync request failed (' + r.status + ')');
+        return r.json();
+      })
+      .then(function (res) {
+        if (!res) return;
+        if (!res.ok || !res.run_id) throw new Error('Unexpected sync response');
+        pollSyncStatus(res.run_id, Date.now() + SYNC_POLL_TIMEOUT_MS, function (rec) {
+          if (!rec || rec.status === 'failed') {
+            finishSync('Sync didn\u2019t finish \u2014 try again in a few minutes.');
+            return;
+          }
+          if (rec.last_synced) setSyncLast('Last synced ' + rec.last_synced);
+          var text = syncResultText(rec);
+          if (rec.status === 'partial') {
+            text = 'Sync finished, but not every listing could be checked \u2014 ' +
+              text.charAt(0).toLowerCase() + text.slice(1);
+          }
+          finishSync(text);
+        });
+      })
+      .catch(function () {
+        finishSync('Sync didn\u2019t finish \u2014 try again in a few minutes.');
+      });
+  }
+
+  function wireSyncButton() {
+    var btn = $('sync-btn');
+    if (btn) btn.addEventListener('click', runSync);
   }
 
   /* ---------- town selector ---------- */
@@ -541,6 +654,7 @@
 
     loadAll().then(function () {
       renderTrustBar();
+      loadInitialSyncStatus();
       renderTowns();
       populateCategoryFilter();
       renderJobs();

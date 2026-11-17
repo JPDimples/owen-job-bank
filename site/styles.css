@@ -85,6 +85,15 @@ p { margin: 0 0 .7em; }
 .trust-bar .trust-value { font-size: 1.12rem; font-weight: 700; }
 .trust-bar .trust-note { flex-basis: 100%; font-size: .92rem; color: var(--muted); margin: 0; }
 
+/* Sync row (inside the trust bar) */
+.trust-bar .sync-row {
+  flex-basis: 100%; display: flex; flex-wrap: wrap;
+  gap: 10px 16px; align-items: center;
+}
+.trust-bar .sync-last { font-size: .92rem; color: var(--muted); }
+.trust-bar .sync-status { flex-basis: 100%; font-size: .92rem; margin: 0; }
+.trust-bar .sync-status:empty { display: none; }
+
 /* Sections */
 main section { margin: 34px 0; }
 .section-head { margin-bottom: 14px; }
@@ -185,6 +194,8 @@ main section { margin: 34px 0; }
   text-decoration: none; min-height: 48px;
 }
 .btn:hover { background: var(--accent-dark); }
+.btn:disabled { opacity: .6; cursor: not-allowed; }
+.btn:disabled:hover { background: var(--accent); }
 .job-link { display: inline-block; font-weight: 700; }
 .job-link::after { content: " \2197"; }
 
